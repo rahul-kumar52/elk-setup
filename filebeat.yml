@@ -1,0 +1,20 @@
+filebeat.inputs:
+  - type: filestream
+    enabled: true
+    paths:
+      - /var/lib/docker/containers/*/*.log
+    parsers:
+      - container: ~
+
+processors:
+  - add_docker_metadata: ~
+
+output.logstash:
+  hosts: ["logstash:5044"]
+  ssl:
+    certificate_authorities: ["/usr/share/filebeat/certs/ca/ca.crt"]
+
+logging:
+  level: debug
+  selectors: ["*"]
+  to_stderr: true
